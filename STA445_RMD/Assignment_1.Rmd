@@ -1,0 +1,195 @@
+---
+title: "Assignment 1"
+author: "Reagan Anderson"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(broom)
+library(faraway)
+library(tinytex)
+```
+
+## Exercise 1:
+Create a vector of three elements (2,4,6) and name that vector `vec_a`. Create a second vector, `vec_b`, that contains (8,10,12). Add these two vectors together and name the result `vec_c`.
+
+```{r}
+vec_a <- c(2,4,6)
+vec_b <- c(8,10,12)
+vec_c <- c(vec_a, vec_b)
+```
+
+
+## Exercise 2:
+Create a vector, named `vec_d`, that contains only two elements (14,20). Add this vector to `vec_a`. What is the result and what do you think R did (look up the recycling rule using Google)? What is the warning message that R gives you?
+
+```{r}
+vec_d <- c(14,20)
+vec_e <- vec_a + vec_d
+```
+
+**Answer:**
+The result is a vector containing the elements (2,4,6,14,20). R did use the recycling rule. The warning is that the "object length is not a multiple of shorter object length" meaning that object of vec_a and vec_d are not the same lengths, and therefore the function of recycling the values repeats until all elements of vec_a have been added to. 
+
+
+## Exercise 3:
+Next add 5 to the vector vec_a. What is the result and what did R do? Why doesn't it give you a warning message similar to what you saw in the previous problem?
+
+```{r}
+vec_a <- vec_a + 5
+```
+
+**Answer:**
+The result is a vector contianing the elements (2,4,6,5). It doesn't give a warning because 5 is not a vector, and therefore only has the size of 1 and is added to every element of vec_a. 
+
+
+## Exercise 5:
+Generate the vector of even numbers $$\left\{ 2,4,6,\dots,20\right\}$$
+  a) Using the seq() function and 
+
+```{r}
+seq(2,20,2)
+```
+
+  b) Using the a:b shortcut and some subsequent algebra. 
+  *Hint: Generate the vector 1-10 and then multiple it by 2*.
+
+```{r}
+seq(1:10) * 2
+```
+
+
+## Exercise 6:
+Generate a vector of 21 elements that are evenly placed between 0 and 1 using the `seq()` command and name this vector `x`. 
+
+```{r}
+x <- seq(0,1, length.out=21)
+x
+```
+
+
+## Exercise 8:
+Generate the vector $$\left\{ 2,2,2,2,4,4,4,4,8,8,8,8\right\}$$
+using the `rep()` command. You might need to check the help file for rep() to see all of the options that rep() will accept. In particular, look at the optional argument `each=`.
+
+```{r}
+# c(rep(2,4), rep(4,4), rep(8,4))
+# rep(c(2,4,8), each=4)
+rep(2:8, c(4,0,4,0,0,0,4))
+```
+
+
+## Exercise 11:
+Create and manipulate a data frame.
+  
+  a) Create a `data.frame` named `my.trees` that has the following columns:
+        + Girth = {8.3, 8.6, 8.8, 10.5, 10.7, 10.8, 11.0}
+        + Height= {70, 65, 63, 72, 81, 83, 66}
+        + Volume= {10.3, 10.3, 10.2, 16.4, 18.8, 19.7, 15.6}
+        
+```{r}
+my.trees <- data.frame(
+  Girth = c(8.3, 8.6, 8.8, 10.5, 10.7, 10.8, 11.0),
+    Height = c(70, 65, 63, 72, 81, 83, 66),
+    Volume = c(10.3, 10.3, 10.2, 16.4, 18.8, 19.7, 15.6)
+)
+my.trees
+```        
+        
+  b) Without using `dplyr` functions, extract the third observation (i.e. the third row)
+    
+```{r}
+my.trees[3,]
+```    
+    
+  c) Without using `dplyr` functions, extract the Girth column referring to it by name (don't use whatever order you placed the columns in).
+    
+```{r}
+my.trees["Girth"]
+```
+
+  d) Without using `dplyr` functions, print out a data frame of all the observations *except* for the fourth observation. (i.e. Remove the fourth observation/row.)
+    
+```{r}
+my.trees[-4,]
+```    
+    
+  e) Without using `dplyr` functions, use the `which()` command to create a vector of row indices that have a `girth` greater than 10. Call that vector `index`.
+    
+```{r}
+index <- which(my.trees$Girth > 10)
+```
+    
+  f) Without using `dplyr` functions, use the `index` vector to create a small data set with just the large girth trees.
+    
+```{r}
+trees_large <- data.frame(
+  my.trees[index,]
+)
+trees_large
+
+# slice(my.trees, index)
+```
+
+  g) Without using `dplyr` functions, use the `index` vector to create a small data set with just the small girth trees
+
+```{r}
+trees_small <- data.frame(
+  my.trees[-index,]
+) 
+trees_small
+
+# slice(my.trees, -index)
+```
+
+
+## Exercise 12:
+The following code creates a `data.frame` and then has two different methods for removing the rows with `NA` values in the column `Grade`. Explain the difference between the two.
+```{r, eval=FALSE}
+    df <- data.frame(name= c('Alice','Bob','Charlie','Daniel'),
+                     Grade = c(6,8,NA,9))
+    
+    df[ -which(  is.na(df$Grade) ), ]
+    df[  which( !is.na(df$Grade) ), ]
+```
+
+**Answer:**
+The first example takes the column 'Grades' and finds the 'NA' values and returns true using the is.na() function. Then takes the not true and removes them from the 'df' data frame using the which() with a '-' at the beginning to represent the not true. 
+The second example takes the same column 'Grades' and finds the is 'NA' values, using the is.na() function. Then returns the not true, because of the '!' in front of the is.na to show the not, and then removing the false values from the data frame. 
+
+
+## Exercise 14:
+Create and manipulate a list.
+  a) Create a list named my.test with elements:
+        + x = c(4,5,6,7,8,9,10)
+        + y = c(34,35,41,40,45,47,51)
+        + slope = 2.82
+        + p.value = 0.000131
+        
+```{r}
+x <- c(4,5,6,7,8,9,10)
+y <- c(34,35,41,40,45,47,51)
+slope <- 2.82
+p.value <- 0.000131
+
+my_list <- list(X_values = x, Y_values = y, Slope = slope, P_value = p.value)
+str(my_list)
+```
+
+  b) Extract the second element in the list.
+    
+```{r}
+my_list[ 2 ]
+```
+    
+  c) Extract the element named `p.value` from the list.
+
+```{r}
+my_list['P_value']
+```
+

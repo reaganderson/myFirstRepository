@@ -1,0 +1,40 @@
+---
+title: "Assignment 1"
+author: "Reagan Anderson"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(broom)
+library(faraway)
+library(tinytex)
+library(readxl)
+```
+
+## Exercise 1:
+Download from GitHub the data file by clicking on this link:  [Example_5.xls](https://github.com/BuscagliaR/STA_444_v2/raw/refs/heads/main/data-raw/Example_5.xls). Open it in Excel and figure out which sheet of data we should import into R. At the same time figure out how many initial rows need to be skipped. Import the data set into a data frame and show the structure of the imported data using the `str()` command. Make sure that your data has $n=31$ observations and the three columns are appropriately named. If you make any modifications to the data file, comment on those modifications.
+
+```{r}
+cherry_data <- read_excel('data_raw/Example_5.xls', sheet = "RawData", range = 'A5:C36')
+
+str(cherry_data)
+```
+
+
+## Exercise 2:
+Download from GitHub the data file by clicking on this link: [Example_3.xls](https://github.com/BuscagliaR/STA_444_v2/raw/refs/heads/main/data-raw/Example_3.xls). Import the data set into a data frame and show the structure of the imported data using the `tail()` command which shows the last few rows of a data table. Make sure the Tesla values are `NA` where appropriate and that both `-9999` and `NA` are imported as NA values. If you make any modifications to the data file, comment on those modifications.
+
+```{r}
+car_data <- read_excel('data_raw/Example_3.xls', 
+                       sheet = "data", range = "A1:L34", na = c(-9999, "NA"))
+
+# read -9999 and NA as a NA value
+
+tail(car_data)
+```
+
