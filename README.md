@@ -1,2 +1,6 @@
 # myFirstRepository
-First Repository for STA 445
+
+## Reagan Anderson
+
+### STA 445
+
